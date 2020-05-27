@@ -13,17 +13,36 @@ module.exports = merge(webpackBaseConfig, {
       filename: utils.resolve('../server/webpack/public/index.html'),
       inject: true,
       hash: true,
-      // chunks: []
+      // chunks: ['vendors', 'commons', 'index']
     }),
     new CleanWebpackPlugin({
       cleanOnceAfterBuildPatterns: ['**/*', 'webpack']
     })
   ],
   optimization: {
-    minimizer: [new TerserPlugin({
-      cache: true,
-      parallel: true,
-      sourceMap: true
-    }),new OptimizeCssAssetsWebpackPlugin()]
+    usedExports: true,
+    splitChunks: {
+      chunks: 'initial',
+      minChunks: 2,
+      minSize: 0,
+      cacheGroups: {
+        commons: {
+          name: 'commons',
+          chunks: 'initial',
+          minChunks: 2
+        },
+        vendors: {
+          chunks: 'all',
+          minChunks: 1,
+          test: /[\\/]node_modules[\\/]/
+        }
+      }
+    },
+    minimizer: [new OptimizeCssAssetsWebpackPlugin()]
   }
 })
+// new TerserPlugin({
+//   cache: true,
+//   parallel: true,
+//   sourceMap: true
+// }),
