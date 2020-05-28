@@ -1,6 +1,6 @@
 <template>
     <div>
-        This is About Page !!!
+        This is About Page !!! 新增一个测测
         <Other/>
     </div>
 </template>
