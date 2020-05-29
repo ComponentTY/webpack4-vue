@@ -1,6 +1,7 @@
 <template>
     <div>
         This is About Page !!! 新增一个测测
+        <img src="@/assets/upload_img_done.png" alt="">
         <Other/>
     </div>
 </template>

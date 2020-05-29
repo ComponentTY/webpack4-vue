@@ -6,7 +6,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HappyPack = require('happypack')
 const os = require('os')
 const happyThreadPool = HappyPack.ThreadPool({size:  os.cpus().length})
-
+console.log('运行环境：', process.env.NODE_ENV)
 module.exports = {
   mode: process.env.NODE_ENV,
   devtool: 'source-map',
@@ -14,7 +14,7 @@ module.exports = {
     main: utils.resolve('../main.js')
   },
   output: {
-    path: process.env.NODE_ENV === 'development' ? '/' : utils.resolve('../server/webpack/public'),
+    path: process.env.NODE_ENV === 'development' ? utils.resolve('/') : utils.resolve('../server/webpack/public'),
     filename: 'js/[name][hash:7].js',
     chunkFilename: 'js/[name]/[name][id][hash:7].js',
     publicPath: process.env.NODE_ENV === 'development' ? config.dev.assetsPath : config.prod.assetsPath
@@ -67,6 +67,18 @@ module.exports = {
           }
         ],
         sideEffects: true
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif)$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000
+            }
+          }
+        ]
       }
     ]
   },

@@ -1,0 +1,8 @@
+/dist/
+/node_modules/
+npm-debug.log*
+selenium-debug.log
+server/webpack
+
+*.idea
+*.vscode
