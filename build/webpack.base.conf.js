@@ -76,7 +76,8 @@ module.exports = env => {
             {
               loader: 'url-loader',
               options: {
-                limit: 10000
+                limit: 10000,
+                outputPath: env.NODE_ENV === 'development' ? utils.resolve('../images') : utils.resolve('../server/webpack/public/images')
               }
             }
           ]
