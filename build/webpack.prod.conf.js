@@ -13,8 +13,8 @@ module.exports = env => {
     plugins: [
       new HtmlWebpackPlugin({
         title: '零云平台',
-        template: utils.resolve('../index.html'),
-        filename: utils.resolve('../server/webpack/public/index.html'),
+        template: utils.resolve('index.html'),
+        filename: utils.resolve('server/webpack/public/index.html'),
         inject: true,
         hash: true,
         // chunks: ['vendors', 'commons', 'index']

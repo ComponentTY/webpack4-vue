@@ -3,7 +3,7 @@ const path = require('path')
 const packageConfig = require('../package.json')
 module.exports = {
     resolve (filename) {
-      return path.resolve(__dirname, filename)
+      return path.resolve(__dirname, '..', filename)
     },
     createNotifierCallback ()  {
         const notifier = require('node-notifier')

@@ -1,4 +1,4 @@
-var webpack = require('webpack')
+// var webpack = require('webpack')
 const utils = require('./utils')
 const config = require('../config/index')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -12,10 +12,10 @@ module.exports = env => {
     mode: env.NODE_ENV,
     devtool: 'source-map',
     entry: {
-      main: utils.resolve('../main.js')
+      main: utils.resolve('src/main.js')
     },
     output: {
-      path: env.NODE_ENV === 'development' ? utils.resolve('../') : utils.resolve('../server/webpack/public'),
+      path: env.NODE_ENV === 'development' ? utils.resolve('dist') : utils.resolve('server/webpack/public'),
       filename: 'js/[name][hash:7].js',
       chunkFilename: 'js/[name]/[name][id][hash:7].js',
       publicPath: env.NODE_ENV === 'development' ? config.dev.assetsPath : config.prod.assetsPath
@@ -23,7 +23,7 @@ module.exports = env => {
     resolve: {
       alias: {
         'vue$': 'vue/dist/vue.esm.js',
-        '@': utils.resolve('../src')
+        '@': utils.resolve('src')
       },
       extensions: ['.json', '.js', '.vue', '.ts', '.tsx']
     },
@@ -38,18 +38,18 @@ module.exports = env => {
     module: {
       rules: [
         {
-          test: /\.vue$/,
-          use: {
-            loader: 'vue-loader'
-          },
-          exclude: /node_modules/
-        },
-        {
           test: /\.js$/,
           exclude: /node_modules/,
-          use: {
+          include: [utils.resolve('src')],
+          use: [{
             loader: 'happypack/loader?id=js'
-          }
+          }, {
+            loader: 'eslint-loader'
+          }]
+        },
+        {
+          test: /\.vue$/,
+          loader: 'vue-loader'
         },
         {
           test: /\.(sa|sc|c)ss$/,
@@ -70,14 +70,36 @@ module.exports = env => {
           sideEffects: true
         },
         {
-          test: /\.(png|jpg|jpeg|gif)$/,
-          exclude: /node_modules/,
+          test: /\.svg$/,
+          include: utils.resolve('src/icons'),
+          loader: 'svg-sprite-loader',
+          options: {
+            symbolId: 'icon-[name]',
+            esModule: false
+          }
+        },
+        {
+          test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+          exclude: [utils.resolve('src/icons')],
           use: [
             {
               loader: 'url-loader',
               options: {
+                name: 'images/[name].[ext]',
                 limit: 10000,
-                outputPath: env.NODE_ENV === 'development' ? utils.resolve('../images') : utils.resolve('../server/webpack/public/images')
+                esModule: false
+              }
+            }
+          ]
+        },
+        {
+          test: /\.(eot|woff2?|ttf|otf)$/,
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                name: 'fonts/[name].[ext]',
+                esModule: false
               }
             }
           ]
@@ -87,7 +109,9 @@ module.exports = env => {
     plugins: [
       new HappyPack({
         id: 'js',
-        loaders: ['babel-loader'],
+        loaders: [{
+          loader: 'babel-loader?cacheDirectory=true',
+        }],
         // share threadpool
         threadPool: happyThreadPool
       }),
