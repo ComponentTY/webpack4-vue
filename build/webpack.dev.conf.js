@@ -9,14 +9,7 @@ const PORT = process.env.PORT && Number(process.env.PORT)
 const portfinder = require('portfinder')
 const conf = require('../config')
 portfinder.basePort = PORT || conf.dev.port
-portfinder.getPort((err, port) => {
-    if (err) {
-        throw err
-        return false
-    } else {
-        conf.dev.port = port
-    }
-})
+
 module.exports = env => {
     let devConfig = merge(webpackBaseConfig(env), {
         devServer: {
@@ -53,12 +46,23 @@ module.exports = env => {
             })
         ]
     })
-    let port = devConfig.devServer.port
-    devConfig.plugins.push(new FriendlyErrorsWebpackPlugin({
-        compilationSuccessInfo: {
-            messages: [`This Application is Running at http://${devConfig.devServer.host}:${port}`]
-        },
-        onErrors: env.NODE_ENV === 'development' ? utils.createNotifierCallback() : undefined
-    }))
-    return devConfig
+    return new Promise((resolve, reject) => {
+        portfinder.getPort((err, port) => {
+            if (err) {
+                throw err
+                reject(err)
+            } else {
+                // console.log(port)
+                devConfig.devServer.port = port
+                devConfig.plugins.push(new FriendlyErrorsWebpackPlugin({
+                    compilationSuccessInfo: {
+                        messages: [`This Application is Running at http://${devConfig.devServer.host}:${devConfig.devServer.port}`]
+                    },
+                    onErrors: env.NODE_ENV === 'development' ? utils.createNotifierCallback() : undefined
+                }))
+                resolve(devConfig)
+            }
+        })
+    })
+    // let port = devConfig.devServer.port
 }
