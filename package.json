@@ -8,7 +8,8 @@
     "server": "webpack-dev-server --progress --config build/webpack.dev.conf.js --env.NODE_ENV=development --mode=development",
     "build": "webpack --env.NODE_ENV production --config build/webpack.prod.conf.js --mode=production",
     "build:dev": "webpack --env.NODE_ENV=development --config build/webpack.prod.conf.js --mode=development",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "live-server ./server/webpack/public"
   },
   "author": "",
   "license": "ISC",
@@ -51,6 +52,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "portfinder": "^1.0.26",
     "sass-loader": "^8.0.2",
+    "live-server": "^1.2.1",
     "semver": "^7.3.2",
     "shelljs": "^0.8.4",
     "style-loader": "^1.2.1",
