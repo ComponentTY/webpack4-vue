@@ -9,6 +9,7 @@ const PORT = process.env.PORT && Number(process.env.PORT)
 const portfinder = require('portfinder')
 const conf = require('../config')
 portfinder.basePort = PORT || conf.dev.port
+const Mock = require('../mock/mock.js');
 
 module.exports = env => {
     let devConfig = merge(webpackBaseConfig(env), {
@@ -24,14 +25,17 @@ module.exports = env => {
             proxy: {
                 '/api': {
                     target: 'http://localhost:3000',
-                    pathRewrite: {'^/api': ''}
+                    pathRewrite: { '^/api': '' }
                 }
             },
             overlay: { warnings: false, errors: true },
             inline: true,
             watchOptions: {
                 poll: true
-            }
+            },
+            before(app) {
+                Mock(app)    //这个Mock就是上面那个mock
+            },
         },
         plugins: [
             new webpack.NoEmitOnErrorsPlugin(),
