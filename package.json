@@ -6,8 +6,9 @@
   "sideEffects": false,
   "scripts": {
     "server": "webpack-dev-server --progress --config build/webpack.dev.conf.js --env.NODE_ENV=development --mode=development",
-    "build": "webpack --env.NODE_ENV production --config build/webpack.prod.conf.js --mode=production",
-    "build:dev": "webpack --env.NODE_ENV=development --config build/webpack.prod.conf.js --mode=development",
+    "build:test": "node build/build.js --env.NODE_ENV=test --mode=test",
+    "build:prod": "node build/build.js --env.NODE_ENV=production --mode=production",
+    "build:dev": "node build/build.js --env.NODE_ENV=development --mode=development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

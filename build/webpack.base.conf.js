@@ -7,18 +7,17 @@ const HappyPack = require('happypack')
 const os = require('os')
 const happyThreadPool = HappyPack.ThreadPool({size:  os.cpus().length})
 module.exports = env => {
-  console.log(env.NODE_ENV)
   return {
-    mode: env.NODE_ENV,
+    mode: env,
     devtool: 'source-map',
     entry: {
       main: utils.resolve('src/main.js')
     },
     output: {
-      path: env.NODE_ENV === 'development' ? utils.resolve('dist') : utils.resolve('server/webpack/public'),
+      path: env === 'development' ? utils.resolve('dist') : utils.resolve('server/webpack/public'),
       filename: 'js/[name][hash:7].js',
       chunkFilename: 'js/[name]/[name][id][hash:7].js',
-      publicPath: env.NODE_ENV === 'development' ? config.dev.assetsPath : config.prod.assetsPath
+      publicPath: env === 'development' ? config.dev.assetsPath : config.prod.assetsPath
     },
     resolve: {
       alias: {
@@ -59,7 +58,7 @@ module.exports = env => {
               loader: MiniCssExtractPlugin.loader,
               options: {
                 sourceMap: true,
-                hmr: env.NODE_ENV === 'development'
+                hmr: env === 'development'
               }
             }, {
               loader: 'css-loader'
@@ -117,8 +116,8 @@ module.exports = env => {
       }),
       new VueLoaderPlugin(),
       new MiniCssExtractPlugin({
-        filename: env.NODE_ENV === 'development' ? '[name].css' : 'css/[name].[hash].css',
-        chunkFilename: env.NODE_ENV === 'development' ? '[id].css' : 'css/[name].[id].[hash].css'
+        filename: env === 'development' ? '[name].css' : 'css/[name].[hash].css',
+        chunkFilename: env === 'development' ? '[id].css' : 'css/[name].[id].[hash].css'
       })
     ]
   }

@@ -1,3 +1,6 @@
+'use strict'
+require('./check-versions')()
+
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const utils = require('./utils')
 const merge = require('webpack-merge')
